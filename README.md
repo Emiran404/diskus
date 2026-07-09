@@ -1,44 +1,79 @@
-# diskus
+<div align="center">
 
-A fast, colorful folder size analyzer for your terminal — written in Go.
+# 📁 diskus
 
-Bir klasörün ne kadar yer kapladığını renkli, hızlı ve interaktif olarak gösteren terminal aracı.
+### See what's eating your disk — fast, colorful, interactive.
 
-[![Go](https://img.shields.io/badge/Go-1.26-00ADD8?logo=go)](https://go.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)](#installation)
+**English** · [Türkçe](#-türkçe)
 
-> **English** · [Türkçe](#türkçe)
+<br/>
 
+[![Release](https://img.shields.io/github/v/release/Emiran404/diskus?style=for-the-badge&color=7D56F4&labelColor=1a1b26)](https://github.com/Emiran404/diskus/releases/latest)
+[![Go](https://img.shields.io/badge/Go-1.26-00ADD8?style=for-the-badge&logo=go&logoColor=white&labelColor=1a1b26)](https://go.dev)
+[![License](https://img.shields.io/badge/License-MIT-50FA7B?style=for-the-badge&labelColor=1a1b26)](LICENSE)
+[![Platforms](https://img.shields.io/badge/macOS%20·%20Linux%20·%20Windows-FFA500?style=for-the-badge&labelColor=1a1b26)](#-installation)
+
+<br/>
+
+<img src="assets/demo.svg" alt="diskus demo" width="760"/>
+
+</div>
+
+<br/>
+
+## ✨ Why diskus?
+
+`du` is cryptic. Finder lies. **diskus** scans any folder concurrently and shows you — in one glance — where your gigabytes went. Then lets you *walk into* the result like a file manager.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🎨 Beautiful by default
+Tree view with size bars, percentages and colors. Pipe-friendly: colors auto-off when redirected, honors `NO_COLOR`.
+
+### ⚡ Fast by design
+Top-level directories are scanned **in parallel** with goroutines. A 25 GB projects folder? Seconds.
+
+### 🕹️ Interactive TUI
+`diskus --tui` opens a navigable browser — arrow keys to dive into folders, built with [Bubble Tea](https://github.com/charmbracelet/bubbletea).
+
+</td>
+<td width="50%" valign="top">
+
+### 📊 File-type X-ray
+`--types` answers "*what kind* of stuff is big" — `.mp4 62%`, `.zip 19%`…
+
+### 🌍 Speaks 10 languages
+TR · EN · DE · FR · ES · IT · PT · RU · ZH · JA — auto-detects your system language.
+
+### 📦 Single binary
+No runtime, no dependencies. Download & run on **macOS, Linux, Windows**.
+
+</td>
+</tr>
+</table>
+
+<div align="center">
+<img src="assets/tui.svg" alt="diskus interactive TUI" width="760"/>
+</div>
+
+## 🚀 Quick start
+
+```bash
+diskus                          # current folder, sorted by size
+diskus --tui ~/Downloads        # interactive browser
+diskus --types --top 10         # which file types eat the disk
+diskus --top 5 --depth 2        # tree: 2 levels, 5 biggest per level
+diskus --min 100mb --sort count # hide small stuff, sort by file count
+diskus --disk                   # real allocated disk usage (like du)
+diskus --json . > report.json   # machine-readable
 ```
-📁 ~/Downloads
 
-  ├─ videos/       ███████████████░░░░░     4.2 GB   68.1%
-  ├─ archives/     █████░░░░░░░░░░░░░░░░     1.4 GB   22.7%
-  ├─ images/       █░░░░░░░░░░░░░░░░░░░░   380.2 MB    6.0%
-  └─ documents/    ░░░░░░░░░░░░░░░░░░░░░   190.5 MB    3.1%
+## 📦 Installation
 
-  Total: 6.1 GB  (12480 files)
-```
-
-## Features
-
-- 🎨 **Colorful tree view** with size bars and percentages
-- 🕹️ **Interactive browser** (`--tui`) — walk into folders with arrow keys
-- ⚡ **Fast** — top-level directories are scanned concurrently
-- 📊 **File-type breakdown** (`--types`) — see which extensions eat your disk
-- 🔎 **Filters** — `--top`, `--depth`, `--min`, `--exclude`, `--all`
-- 💽 **Real disk usage** (`--disk`) — allocated blocks, like `du`
-- 🔗 **Loop-safe symlinks** (`--follow`)
-- 📄 **JSON output** (`--json`) for scripts
-- 🌍 **10 languages** — auto-detects your system language
-- 📦 **Single binary** — no runtime, works on macOS, Linux and Windows
-
-## Installation
-
-Two options: **download a prebuilt binary** (no Go required) or **`go install`**.
-
-### 🍎 macOS
+<details open>
+<summary><b>🍎 macOS</b></summary>
 
 ```bash
 # Apple Silicon (M1/M2/M3): arm64  ·  Intel: amd64
@@ -49,9 +84,12 @@ sudo mv diskus /usr/local/bin/
 diskus --version
 ```
 
-> The binary is unsigned, so macOS may warn "developer cannot be verified". The `xattr` line fixes it — or right-click the file in Finder → Open.
+> Unsigned binary — if macOS warns "developer cannot be verified", the `xattr` line above fixes it (or right-click → Open in Finder).
 
-### 🐧 Linux
+</details>
+
+<details>
+<summary><b>🐧 Linux</b></summary>
 
 ```bash
 # amd64 for most machines  ·  ARM: diskus-linux-arm64
@@ -61,7 +99,10 @@ sudo mv diskus /usr/local/bin/
 diskus --version
 ```
 
-### 🪟 Windows (PowerShell)
+</details>
+
+<details>
+<summary><b>🪟 Windows (PowerShell)</b></summary>
 
 ```powershell
 Invoke-WebRequest -Uri "https://github.com/Emiran404/diskus/releases/latest/download/diskus-windows-amd64.exe" -OutFile "diskus.exe"
@@ -72,7 +113,10 @@ setx PATH "$env:PATH;$env:USERPROFILE\bin"
 diskus --version
 ```
 
-### 🌍 Any platform — with Go
+</details>
+
+<details>
+<summary><b>🌍 Any platform — with Go</b></summary>
 
 ```bash
 go install github.com/Emiran404/diskus@latest
@@ -86,96 +130,105 @@ cd diskus
 make install      # or: go install .
 ```
 
-> If `diskus: command not found`, make sure `~/go/bin` (Windows: `%USERPROFILE%\go\bin`) is on your `PATH`:
-> `export PATH="$HOME/go/bin:$PATH"`
+> If `diskus: command not found`, add `~/go/bin` (Windows: `%USERPROFILE%\go\bin`) to your `PATH`.
 
-> **Which arch?** macOS Apple Silicon = `arm64`. Linux: run `uname -m` (`x86_64` → amd64, `aarch64` → arm64). Windows is usually `amd64`.
+</details>
 
-## Usage
+> **Which arch?** macOS Apple Silicon = `arm64` · Linux: `uname -m` (`x86_64` → amd64, `aarch64` → arm64) · Windows is usually `amd64`.
 
-```bash
-diskus                              # analyze current folder
-diskus ~/Downloads                  # analyze a specific path
-diskus --top 10                     # only the 10 largest items
-diskus --depth 2                    # show 2 nested levels (tree)
-diskus --depth 0                    # unlimited depth
-diskus --tui ~/Downloads            # interactive browser
-diskus --types --top 10             # size breakdown by file type
-diskus --sort count --min 10mb      # sort by file count, hide < 10 MB
-diskus --disk                       # real allocated disk space (like du)
-diskus --json . > report.json       # machine-readable output
-```
+## ⚙️ Options
 
-### Options
+| Flag | Description | Default |
+|:-----|:------------|:-------:|
+| `--top N` | Largest N items per level (0 = all) | `0` |
+| `--depth N` | Nested levels to show (0 = unlimited) | `1` |
+| `--tui` | Interactive browser | — |
+| `--types` | Size breakdown by file extension | — |
+| `--sort` | `size` · `name` · `count` | `size` |
+| `--reverse` | Reverse sort order | — |
+| `--min` | Hide items below size (e.g. `10mb`) | — |
+| `--unit` | `auto` · `b` · `kb` · `mb` · `gb` · `tb` | `auto` |
+| `--all` | Include hidden files | — |
+| `--exclude a,b` | Names to skip | `node_modules,.git,vendor` |
+| `--follow` | Follow symlinks (loop-safe) | — |
+| `--disk` | Allocated disk space, like `du` | — |
+| `--json` | JSON output | — |
+| `--no-color` | Disable colors (also `NO_COLOR` env) | — |
+| `--verbose` | List inaccessible paths | — |
+| `--lang` | UI language for this run | `auto` |
+| `--set-lang` | Save language permanently | — |
+| `--version` | Show version | — |
 
-| Flag | Description |
-|------|-------------|
-| `--top N` | Show only the largest N items per level (0 = all) |
-| `--depth N` | Nested levels to show (0 = unlimited) |
-| `--all` | Include hidden files (starting with `.`) |
-| `--exclude a,b` | Names to skip (default `node_modules,.git,vendor`) |
-| `--sort` | `size` (default), `name`, `count` |
-| `--reverse` | Reverse the sort order |
-| `--unit` | `auto`, `b`, `kb`, `mb`, `gb`, `tb` |
-| `--min` | Hide items below this size (e.g. `10mb`) |
-| `--tui` | Launch interactive browser |
-| `--types` | Size breakdown by file type |
-| `--follow` | Follow symlinks (loop-safe) |
-| `--disk` | Use allocated disk space instead of logical size |
-| `--json` | Print result as JSON |
-| `--no-color` | Disable colored output (also honors `NO_COLOR`) |
-| `--verbose` | List inaccessible paths |
-| `--lang` | Interface language for this command |
-| `--set-lang` | Set language permanently |
-| `--version` | Show version |
+### 🌍 Languages
 
-### Interactive mode
-
-```
-↑/↓  move    →  enter folder    ←  back    q  quit
-```
-
-## Languages
-
-Turkish, English, German, French, Spanish, Italian, Portuguese, Russian, Chinese, Japanese.
-
-The language is chosen in this order: `--lang` flag → `DISKUS_LANG` env var → saved setting → system language.
+Priority: `--lang` flag → `DISKUS_LANG` env → saved setting → system language.
 
 ```bash
-diskus --lang de .        # German, this command only
-diskus --set-lang en      # set English permanently
-diskus --set-lang auto    # go back to system language
+diskus --lang de .        # German, this run only
+diskus --set-lang en      # English, permanently
+diskus --set-lang auto    # back to system language
 ```
 
-Codes: `tr en de fr es it pt ru zh ja` (and `auto`).
+## 🖥️ TUI keys
 
-## License
+| Key | Action |
+|:---:|:-------|
+| `↑` `↓` / `k` `j` | move |
+| `→` / `l` / `Enter` | enter folder |
+| `←` / `h` / `Backspace` | go back |
+| `g` / `G` | jump to top / bottom |
+| `q` / `Esc` | quit |
+
+## 🤝 Contributing
+
+Issues and PRs are welcome! To add a new language, add a column to [`catalog.go`](catalog.go) and register the code in [`i18n.go`](i18n.go) — that's it.
+
+## 📄 License
 
 [MIT](LICENSE) © Emirhan Gök
 
+<br/>
+
 ---
 
-## Türkçe
+<br/>
 
-Terminalde klasör boyutlarını renkli, hızlı ve interaktif gösteren bir araç. Tek binary, kurulum kolay, macOS · Linux · Windows üzerinde çalışır.
+<div align="center">
 
-### Özellikler
+# 🇹🇷 Türkçe
 
-- 🎨 **Renkli ağaç görünümü** — çubuklar ve yüzdelerle
+### Diskini ne yiyor? — hızlı, renkli, interaktif.
+
+</div>
+
+## ✨ Neden diskus?
+
+`du` kriptik, Finder yalan söylüyor. **diskus** herhangi bir klasörü paralel tarar ve gigabaytlarının nereye gittiğini tek bakışta gösterir. Sonra sonucun *içinde gezinmene* izin verir.
+
+- 🎨 **Varsayılan olarak güzel** — çubuklu, yüzdeli, renkli ağaç görünümü
+- ⚡ **Tasarımı gereği hızlı** — üst seviye klasörler goroutine'lerle paralel taranır
 - 🕹️ **İnteraktif gezgin** (`--tui`) — ok tuşlarıyla klasörlere gir/çık
-- ⚡ **Hızlı** — üst seviye klasörler eşzamanlı taranır
-- 📊 **Dosya türü dökümü** (`--types`) — hangi uzantı ne kadar yer kaplıyor
-- 🔎 **Filtreler** — `--top`, `--depth`, `--min`, `--exclude`, `--all`
+- 📊 **Dosya türü röntgeni** (`--types`) — "büyük olan *ne tür* şeyler?"
 - 💽 **Gerçek disk kullanımı** (`--disk`) — `du` gibi ayrılan blok
 - 🔗 **Döngü korumalı symlink** (`--follow`)
-- 📄 **JSON çıktı** (`--json`)
 - 🌍 **10 dil** — sistem dilini otomatik algılar
+- 📦 **Tek binary** — macOS · Linux · Windows
 
-### Kurulum
+## 🚀 Hızlı başlangıç
 
-İki yol var: **hazır binary indir** (Go gerekmez) veya **`go install`**.
+```bash
+diskus                          # bulunduğun klasör
+diskus --tui ~/Downloads        # interaktif gezgin
+diskus --types --top 10         # hangi dosya türü ne kadar yer kaplıyor
+diskus --top 5 --depth 2        # ağaç: 2 seviye, seviye başına en büyük 5
+diskus --min 100mb --sort count # küçükleri gizle, dosya sayısına göre sırala
+diskus --json . > rapor.json    # makine-okur çıktı
+```
 
-#### 🍎 macOS
+## 📦 Kurulum
+
+<details open>
+<summary><b>🍎 macOS</b></summary>
 
 ```bash
 # Apple Silicon (M1/M2/M3): arm64  ·  Intel: amd64
@@ -186,9 +239,12 @@ sudo mv diskus /usr/local/bin/
 diskus --version
 ```
 
-> Binary imzasız olduğu için macOS "geliştirici doğrulanamadı" diyebilir. Yukarıdaki `xattr` satırı bunu çözer — ya da Finder'da sağ tık → Aç.
+> Binary imzasız — macOS "geliştirici doğrulanamadı" derse yukarıdaki `xattr` satırı çözer (ya da Finder'da sağ tık → Aç).
 
-#### 🐧 Linux
+</details>
+
+<details>
+<summary><b>🐧 Linux</b></summary>
 
 ```bash
 # Çoğu makine için amd64  ·  ARM: diskus-linux-arm64
@@ -198,7 +254,10 @@ sudo mv diskus /usr/local/bin/
 diskus --version
 ```
 
-#### 🪟 Windows (PowerShell)
+</details>
+
+<details>
+<summary><b>🪟 Windows (PowerShell)</b></summary>
 
 ```powershell
 Invoke-WebRequest -Uri "https://github.com/Emiran404/diskus/releases/latest/download/diskus-windows-amd64.exe" -OutFile "diskus.exe"
@@ -209,7 +268,10 @@ setx PATH "$env:PATH;$env:USERPROFILE\bin"
 diskus --version
 ```
 
-#### 🌍 Her platform — Go ile
+</details>
+
+<details>
+<summary><b>🌍 Her platform — Go ile</b></summary>
 
 ```bash
 go install github.com/Emiran404/diskus@latest
@@ -223,60 +285,57 @@ cd diskus
 make install
 ```
 
-> `diskus: command not found` alırsan `~/go/bin` (Windows: `%USERPROFILE%\go\bin`) klasörünü PATH'e ekle:
-> `export PATH="$HOME/go/bin:$PATH"`
+> `diskus: command not found` alırsan `~/go/bin` (Windows: `%USERPROFILE%\go\bin`) klasörünü PATH'e ekle.
 
-> **Hangi mimari?** macOS Apple Silicon = `arm64`. Linux: `uname -m` çalıştır (`x86_64` → amd64, `aarch64` → arm64). Windows genelde `amd64`.
+</details>
 
-### Kullanım
+> **Hangi mimari?** macOS Apple Silicon = `arm64` · Linux: `uname -m` (`x86_64` → amd64, `aarch64` → arm64) · Windows genelde `amd64`.
 
-```bash
-diskus                              # bulunduğun klasör
-diskus ~/Downloads                  # belirli bir yol
-diskus --top 10                     # en büyük 10 öğe
-diskus --depth 2                    # 2 seviye iç içe (ağaç)
-diskus --tui ~/Downloads            # interaktif gezgin
-diskus --types --top 10             # dosya türü dökümü
-diskus --sort count --min 10mb      # sayıya göre sırala, 10 MB altını gizle
-diskus --disk                       # gerçek disk kullanımı
-diskus --json . > rapor.json        # makine-okur çıktı
-```
+## ⚙️ Seçenekler
 
-### Seçenekler
+| Bayrak | Açıklama | Varsayılan |
+|:-------|:---------|:----------:|
+| `--top N` | Her seviyede en büyük N öğe (0 = hepsi) | `0` |
+| `--depth N` | İç içe seviye sayısı (0 = sınırsız) | `1` |
+| `--tui` | İnteraktif gezgin | — |
+| `--types` | Uzantıya göre boyut dökümü | — |
+| `--sort` | `size` · `name` · `count` | `size` |
+| `--reverse` | Sıralamayı ters çevir | — |
+| `--min` | Bu boyutun altını gizle (ör. `10mb`) | — |
+| `--unit` | `auto` · `b` · `kb` · `mb` · `gb` · `tb` | `auto` |
+| `--all` | Gizli dosyaları dahil et | — |
+| `--exclude a,b` | Atlanacak adlar | `node_modules,.git,vendor` |
+| `--follow` | Symlink'leri takip et (döngü korumalı) | — |
+| `--disk` | `du` gibi ayrılan disk alanı | — |
+| `--json` | JSON çıktı | — |
+| `--no-color` | Renkleri kapat (`NO_COLOR` da geçerli) | — |
+| `--verbose` | Erişilemeyen yolları listele | — |
+| `--lang` | Bu çalıştırma için arayüz dili | `auto` |
+| `--set-lang` | Dili kalıcı kaydet | — |
+| `--version` | Sürümü göster | — |
 
-| Bayrak | Açıklama |
-|--------|----------|
-| `--top N` | Her seviyede en büyük N öğe (0 = hepsi) |
-| `--depth N` | İç içe seviye sayısı (0 = sınırsız) |
-| `--all` | Gizli dosyaları dahil et |
-| `--exclude a,b` | Atlanacak adlar (varsayılan `node_modules,.git,vendor`) |
-| `--sort` | `size` (varsayılan), `name`, `count` |
-| `--reverse` | Sıralamayı ters çevir |
-| `--unit` | `auto`, `b`, `kb`, `mb`, `gb`, `tb` |
-| `--min` | Bu boyutun altını gizle (ör. `10mb`) |
-| `--tui` | İnteraktif gezgini başlat |
-| `--types` | Dosya türü dökümü |
-| `--follow` | Symlink'leri takip et (döngü korumalı) |
-| `--disk` | Mantıksal boyut yerine ayrılan disk alanı |
-| `--json` | JSON olarak yazdır |
-| `--no-color` | Renkleri kapat (`NO_COLOR` da geçerli) |
-| `--verbose` | Erişilemeyen yolları listele |
-| `--lang` | Bu komut için arayüz dili |
-| `--set-lang` | Dili kalıcı ayarla |
-| `--version` | Sürümü göster |
+### 🌍 Diller
 
-### Diller
-
-Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Çince, Japonca.
-
-Dil önceliği: `--lang` bayrağı → `DISKUS_LANG` ortam değişkeni → kayıtlı ayar → sistem dili.
+Öncelik: `--lang` bayrağı → `DISKUS_LANG` ortam değişkeni → kayıtlı ayar → sistem dili.
 
 ```bash
-diskus --lang de .        # sadece bu komut Almanca
+diskus --lang de .        # sadece bu sefer Almanca
 diskus --set-lang en      # kalıcı İngilizce
 diskus --set-lang auto    # sistem diline dön
 ```
 
-### Lisans
+## 🤝 Katkı
+
+Issue ve PR'lara açığız! Yeni dil eklemek için [`catalog.go`](catalog.go)'ya bir sütun ekleyip kodu [`i18n.go`](i18n.go)'da kaydetmen yeterli.
+
+## 📄 Lisans
 
 [MIT](LICENSE) © Emirhan Gök
+
+<br/>
+
+<div align="center">
+
+**⭐ Faydalı bulduysan bir yıldız bırak — If you find diskus useful, give it a star!**
+
+</div>

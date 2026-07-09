@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" font-family="Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1b26"/>
+      <stop offset="1" stop-color="#16161e"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="752" height="332" rx="12" fill="url(#bg2)" stroke="#2f334d" stroke-width="1"/>
+
+  <circle cx="28" cy="28" r="7" fill="#ff5f57"/>
+  <circle cx="50" cy="28" r="7" fill="#febc2e"/>
+  <circle cx="72" cy="28" r="7" fill="#28c840"/>
+  <text x="380" y="33" text-anchor="middle" fill="#565f89" font-size="12">diskus --tui</text>
+
+  <!-- breadcrumb -->
+  <text x="28" y="72" fill="#7D56F4" font-weight="bold">📁</text>
+  <text x="54" y="72" fill="#00BFFF">Downloads / videos / clips</text>
+  <text x="290" y="72" fill="#FFA500" font-weight="bold">2.8 GB</text>
+  <text x="360" y="72" fill="#565f89">(214 files)</text>
+
+  <!-- selected row -->
+  <rect x="24" y="92" width="600" height="26" rx="4" fill="#7D56F4"/>
+  <text x="34" y="110" fill="#ffffff" font-weight="bold">› tutorial-series/</text>
+  <text x="250" y="110" fill="#ffffff">█████████░░░░░░░░░░░</text>
+  <text x="500" y="110" fill="#ffffff" font-weight="bold" text-anchor="end">1.3 GB</text>
+  <text x="570" y="110" fill="#e0def4" text-anchor="end">46.4%</text>
+
+  <g>
+    <text x="40" y="144" fill="#00BFFF" font-weight="bold">screen-recs/</text>
+    <text x="250" y="144" fill="#7D56F4">██████░░░░░░░░░░░░░░</text>
+    <text x="500" y="144" fill="#FFA500" font-weight="bold" text-anchor="end">890 MB</text>
+    <text x="570" y="144" fill="#565f89" text-anchor="end">31.0%</text>
+  </g>
+  <g>
+    <text x="40" y="172" fill="#c0caf5">intro-final-v3.mp4</text>
+    <text x="250" y="172" fill="#7D56F4">██░░░░░░░░░░░░░░░░░░</text>
+    <text x="500" y="172" fill="#FFA500" font-weight="bold" text-anchor="end">312 MB</text>
+    <text x="570" y="172" fill="#565f89" text-anchor="end">10.9%</text>
+  </g>
+  <g>
+    <text x="40" y="200" fill="#c0caf5">b-roll-city.mov</text>
+    <text x="250" y="200" fill="#7D56F4">█░░░░░░░░░░░░░░░░░░░</text>
+    <text x="500" y="200" fill="#FFA500" font-weight="bold" text-anchor="end">201 MB</text>
+    <text x="570" y="200" fill="#565f89" text-anchor="end">7.0%</text>
+  </g>
+  <g>
+    <text x="40" y="228" fill="#c0caf5">outro.mp4</text>
+    <text x="250" y="228" fill="#7D56F4">█░░░░░░░░░░░░░░░░░░░</text>
+    <text x="500" y="228" fill="#FFA500" font-weight="bold" text-anchor="end">134 MB</text>
+    <text x="570" y="228" fill="#565f89" text-anchor="end">4.7%</text>
+  </g>
+
+  <!-- footer -->
+  <line x1="28" y1="266" x2="732" y2="266" stroke="#2f334d"/>
+  <text x="28" y="298" fill="#565f89">↑/↓ move   •   → enter   •   ← back   •   q quit</text>
+</svg>
