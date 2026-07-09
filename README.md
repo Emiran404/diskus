@@ -181,7 +181,7 @@ diskus --set-lang auto    # back to system language
 
 ## 🤝 Contributing
 
-Issues and PRs are welcome! To add a new language, add a column to [`catalog.go`](catalog.go) and register the code in [`i18n.go`](i18n.go) — that's it.
+Issues and PRs are welcome — see **[CONTRIBUTING.md](CONTRIBUTING.md)** for the dev setup, project layout and how to add a new language in two small steps.
 
 ## 📄 License
 
@@ -326,7 +326,7 @@ diskus --set-lang auto    # sistem diline dön
 
 ## 🤝 Katkı
 
-Issue ve PR'lara açığız! Yeni dil eklemek için [`catalog.go`](catalog.go)'ya bir sütun ekleyip kodu [`i18n.go`](i18n.go)'da kaydetmen yeterli.
+Issue ve PR'lara açığız — geliştirme ortamı, proje yapısı ve iki adımda yeni dil ekleme için **[CONTRIBUTING.md](CONTRIBUTING.md)**'ye bak.
 
 ## 📄 Lisans
 
