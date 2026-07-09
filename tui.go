@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -13,6 +14,13 @@ var (
 	tuiSelected = lipgloss.NewStyle().Bold(true).Background(lipgloss.Color("#7D56F4")).Foreground(lipgloss.Color("#FFFFFF"))
 	tuiFooter   = lipgloss.NewStyle().Foreground(lipgloss.Color("#888888"))
 	tuiCrumb    = lipgloss.NewStyle().Foreground(lipgloss.Color("#00BFFF"))
+	tuiWarn     = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#febc2e"))
+	tuiOk       = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#50FA7B"))
+)
+
+const (
+	modeNormal = iota
+	modeConfirm
 )
 
 type tuiModel struct {
@@ -24,16 +32,25 @@ type tuiModel struct {
 	height      int
 	width       int
 	unit        Unit
+	opts        Options
+	sortMode    SortMode
+	reverse     bool
+	mode        int
+	status      string
+	statusErr   bool
 }
 
-func newTUIModel(root *Node, unit Unit) tuiModel {
+func newTUIModel(root *Node, unit Unit, opts Options, sortMode SortMode, reverse bool) tuiModel {
 	return tuiModel{
-		root:   root,
-		stack:  []*Node{root},
-		cursor: 0,
-		height: 20,
-		width:  80,
-		unit:   unit,
+		root:     root,
+		stack:    []*Node{root},
+		cursor:   0,
+		height:   20,
+		width:    80,
+		unit:     unit,
+		opts:     opts,
+		sortMode: sortMode,
+		reverse:  reverse,
 	}
 }
 
@@ -50,7 +67,20 @@ func (m tuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.height = 3
 		}
 	case tea.KeyMsg:
-		switch msg.String() {
+		key := msg.String()
+
+		if m.mode == modeConfirm {
+			switch key {
+			case "y", "Y", "enter":
+				m = m.doDelete()
+			case "n", "N", "esc", "q":
+				m.mode = modeNormal
+			}
+			return m, nil
+		}
+
+		m.status = ""
+		switch key {
 		case "q", "ctrl+c", "esc":
 			return m, tea.Quit
 		case "up", "k":
@@ -69,7 +99,7 @@ func (m tuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			children := m.current().Children
 			if len(children) > 0 {
 				sel := children[m.cursor]
-				if sel.IsDir && len(sel.Children) > 0 {
+				if sel.IsDir {
 					m.stack = append(m.stack, sel)
 					m.cursorStack = append(m.cursorStack, m.cursor)
 					m.cursor = 0
@@ -83,6 +113,20 @@ func (m tuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursorStack = m.cursorStack[:len(m.cursorStack)-1]
 				m.offset = 0
 			}
+		case "d":
+			if len(m.current().Children) > 0 {
+				m.mode = modeConfirm
+			}
+		case "o":
+			children := m.current().Children
+			if len(children) > 0 {
+				sel := children[m.cursor]
+				if err := revealPath(sel.Path, sel.IsDir); err != nil {
+					m.status, m.statusErr = T("tui.open_failed", err.Error()), true
+				}
+			}
+		case "r":
+			m = m.rescan()
 		}
 	}
 
@@ -93,6 +137,48 @@ func (m tuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.offset = m.cursor - m.height + 1
 	}
 	return m, nil
+}
+
+func (m tuiModel) doDelete() tuiModel {
+	m.mode = modeNormal
+	children := m.current().Children
+	if m.cursor >= len(children) {
+		return m
+	}
+	sel := children[m.cursor]
+
+	if err := os.RemoveAll(sel.Path); err != nil {
+		m.status, m.statusErr = T("tui.delete_failed", err.Error()), true
+		return m
+	}
+
+	for _, n := range m.stack {
+		n.Size -= sel.Size
+		n.Count -= sel.Count
+	}
+	cur := m.current()
+	cur.Children = append(children[:m.cursor], children[m.cursor+1:]...)
+	if m.cursor >= len(cur.Children) && m.cursor > 0 {
+		m.cursor--
+	}
+	m.status, m.statusErr = T("tui.deleted", sel.Name), false
+	return m
+}
+
+func (m tuiModel) rescan() tuiModel {
+	res, err := Scan(m.root.Path, m.opts)
+	if err != nil {
+		m.status, m.statusErr = err.Error(), true
+		return m
+	}
+	SortTree(res.Root, m.sortMode, m.reverse)
+	m.root = res.Root
+	m.stack = []*Node{res.Root}
+	m.cursorStack = nil
+	m.cursor = 0
+	m.offset = 0
+	m.status, m.statusErr = T("tui.rescanned"), false
+	return m
 }
 
 func (m tuiModel) View() string {
@@ -172,12 +258,27 @@ func (m tuiModel) View() string {
 	}
 
 	b.WriteString("\n")
-	b.WriteString(tuiFooter.Render(T("tui.footer")))
+	switch {
+	case m.mode == modeConfirm:
+		selName := ""
+		if m.cursor < len(children) {
+			selName = children[m.cursor].Name
+		}
+		b.WriteString(tuiWarn.Render(T("tui.confirm", selName)))
+	case m.status != "":
+		if m.statusErr {
+			b.WriteString(tuiWarn.Render("⚠ " + m.status))
+		} else {
+			b.WriteString(tuiOk.Render("✓ " + m.status))
+		}
+	default:
+		b.WriteString(tuiFooter.Render(T("tui.footer")))
+	}
 	return b.String()
 }
 
-func RunTUI(root *Node, unit Unit) error {
-	p := tea.NewProgram(newTUIModel(root, unit), tea.WithAltScreen())
+func RunTUI(root *Node, unit Unit, opts Options, sortMode SortMode, reverse bool) error {
+	p := tea.NewProgram(newTUIModel(root, unit, opts, sortMode, reverse), tea.WithAltScreen())
 	_, err := p.Run()
 	return err
 }

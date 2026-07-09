@@ -177,7 +177,12 @@ diskus --set-lang auto    # back to system language
 | `→` / `l` / `Enter` | enter folder |
 | `←` / `h` / `Backspace` | go back |
 | `g` / `G` | jump to top / bottom |
+| `d` | delete selected (with confirmation) |
+| `o` | reveal in file manager |
+| `r` | rescan from disk |
 | `q` / `Esc` | quit |
+
+> 🗑️ `d` runs `os.RemoveAll` — deletions are **permanent** (no trash). diskus asks for `y/n` confirmation first.
 
 ## 🤝 Contributing
 
