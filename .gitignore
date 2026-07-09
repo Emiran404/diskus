@@ -1,0 +1,19 @@
+# Derlenen binary'ler
+/diskus
+/diskus.exe
+/dist/
+*.exe
+*.out
+
+# Go
+*.test
+*.prof
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editör
+.idea/
+.vscode/
+*.swp
