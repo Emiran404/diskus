@@ -36,17 +36,49 @@ Bir klasörün ne kadar yer kapladığını renkli, hızlı ve interaktif olarak
 
 ## Installation
 
-### With Go
+Two options: **download a prebuilt binary** (no Go required) or **`go install`**.
+
+### 🍎 macOS
+
+```bash
+# Apple Silicon (M1/M2/M3): arm64  ·  Intel: amd64
+curl -L -o diskus https://github.com/Emiran404/diskus/releases/latest/download/diskus-darwin-arm64
+chmod +x diskus
+xattr -d com.apple.quarantine diskus 2>/dev/null   # clear Gatekeeper flag
+sudo mv diskus /usr/local/bin/
+diskus --version
+```
+
+> The binary is unsigned, so macOS may warn "developer cannot be verified". The `xattr` line fixes it — or right-click the file in Finder → Open.
+
+### 🐧 Linux
+
+```bash
+# amd64 for most machines  ·  ARM: diskus-linux-arm64
+curl -L -o diskus https://github.com/Emiran404/diskus/releases/latest/download/diskus-linux-amd64
+chmod +x diskus
+sudo mv diskus /usr/local/bin/
+diskus --version
+```
+
+### 🪟 Windows (PowerShell)
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/Emiran404/diskus/releases/latest/download/diskus-windows-amd64.exe" -OutFile "diskus.exe"
+mkdir "$env:USERPROFILE\bin" -Force
+move diskus.exe "$env:USERPROFILE\bin\"
+setx PATH "$env:PATH;$env:USERPROFILE\bin"
+# open a new terminal, then:
+diskus --version
+```
+
+### 🌍 Any platform — with Go
 
 ```bash
 go install github.com/Emiran404/diskus@latest
 ```
 
-### Download a binary
-
-Grab a prebuilt binary for your platform from the [Releases](https://github.com/Emiran404/diskus/releases) page, then put it somewhere on your `PATH`.
-
-### Build from source
+Or build from source:
 
 ```bash
 git clone https://github.com/Emiran404/diskus.git
@@ -54,8 +86,10 @@ cd diskus
 make install      # or: go install .
 ```
 
-> If `diskus: command not found`, make sure `~/go/bin` is on your `PATH`:
+> If `diskus: command not found`, make sure `~/go/bin` (Windows: `%USERPROFILE%\go\bin`) is on your `PATH`:
 > `export PATH="$HOME/go/bin:$PATH"`
+
+> **Which arch?** macOS Apple Silicon = `arm64`. Linux: run `uname -m` (`x86_64` → amd64, `aarch64` → arm64). Windows is usually `amd64`.
 
 ## Usage
 
@@ -139,20 +173,60 @@ Terminalde klasör boyutlarını renkli, hızlı ve interaktif gösteren bir ara
 
 ### Kurulum
 
-```bash
-# Go ile
-go install github.com/Emiran404/diskus@latest
+İki yol var: **hazır binary indir** (Go gerekmez) veya **`go install`**.
 
-# Kaynaktan
+#### 🍎 macOS
+
+```bash
+# Apple Silicon (M1/M2/M3): arm64  ·  Intel: amd64
+curl -L -o diskus https://github.com/Emiran404/diskus/releases/latest/download/diskus-darwin-arm64
+chmod +x diskus
+xattr -d com.apple.quarantine diskus 2>/dev/null   # Gatekeeper uyarısını kaldır
+sudo mv diskus /usr/local/bin/
+diskus --version
+```
+
+> Binary imzasız olduğu için macOS "geliştirici doğrulanamadı" diyebilir. Yukarıdaki `xattr` satırı bunu çözer — ya da Finder'da sağ tık → Aç.
+
+#### 🐧 Linux
+
+```bash
+# Çoğu makine için amd64  ·  ARM: diskus-linux-arm64
+curl -L -o diskus https://github.com/Emiran404/diskus/releases/latest/download/diskus-linux-amd64
+chmod +x diskus
+sudo mv diskus /usr/local/bin/
+diskus --version
+```
+
+#### 🪟 Windows (PowerShell)
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/Emiran404/diskus/releases/latest/download/diskus-windows-amd64.exe" -OutFile "diskus.exe"
+mkdir "$env:USERPROFILE\bin" -Force
+move diskus.exe "$env:USERPROFILE\bin\"
+setx PATH "$env:PATH;$env:USERPROFILE\bin"
+# yeni bir terminal aç, sonra:
+diskus --version
+```
+
+#### 🌍 Her platform — Go ile
+
+```bash
+go install github.com/Emiran404/diskus@latest
+```
+
+Ya da kaynaktan:
+
+```bash
 git clone https://github.com/Emiran404/diskus.git
 cd diskus
 make install
 ```
 
-> `diskus: command not found` alırsan `~/go/bin`'i PATH'e ekle:
+> `diskus: command not found` alırsan `~/go/bin` (Windows: `%USERPROFILE%\go\bin`) klasörünü PATH'e ekle:
 > `export PATH="$HOME/go/bin:$PATH"`
 
-Ayrıca [Releases](https://github.com/Emiran404/diskus/releases) sayfasından platformuna uygun hazır binary'yi indirebilirsin.
+> **Hangi mimari?** macOS Apple Silicon = `arm64`. Linux: `uname -m` çalıştır (`x86_64` → amd64, `aarch64` → arm64). Windows genelde `amd64`.
 
 ### Kullanım
 
