@@ -129,7 +129,9 @@ func main() {
 
 	switch {
 	case *tui:
-		if err := RunTUI(res.Root, unit); err != nil {
+		topts := opts
+		topts.Progress = nil
+		if err := RunTUI(res.Root, unit, topts, sortMode, *reverse); err != nil {
 			fmt.Fprintln(os.Stderr, errStyle.Render(T("err.tui")+err.Error()))
 			os.Exit(1)
 		}
